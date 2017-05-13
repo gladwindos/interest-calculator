@@ -1,34 +1,88 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class Input extends Component {
 
   render() {
     return (
-    <form onSubmit={this.props.calculateEarnings}  id="input-form">
-      <p>Interest rate: </p>
-      <input type="number" name="interest" value={this.props.interest} onChange={this.props.handleInputChange} /> %
-      <p>Amount: </p>
-      £ <input type="number" name="amount" value={this.props.amount} onChange={this.props.handleInputChange} />
-      <button className="my-button">Calculate</button>
-    </form>
+      <form onSubmit={this.props.calculateEarnings}  id="input-form">
+        <h3>Savings: </h3>
+        <p>Interest rate: </p>
+        <input type="number" name="interest" value={this.props.interest} onChange={this.props.handleInputChange} /> %
+        <p>Amount: </p>
+        £ <input type="number" name="amount" value={this.props.amount} onChange={this.props.handleInputChange} />
+        <button className="my-button">Calculate</button>
+      </form>
     );
   }
 }
 
+const EarningsInput = props => {
+  const currency = props.currency;
+  // console.log(currency);
+  const yearlyEarnings = (props.earnings*currency.rate).toFixed(2);
+  const monthlyEarnings = (yearlyEarnings/12).toFixed(2);
+  return (
+    <div>
+      {currency.sign} <input type="number" value={monthlyEarnings} readOnly /> /month
+      {currency.sign} <input type="number" value={yearlyEarnings} readOnly /> /year
+    </div>
+  );
+}
 
+const CURRENCY = {
+  pound: {
+    rate: 1,
+    sign: '£'
+  },
+
+  dollar: {
+    rate: 1.29,
+    sign: '$'
+  }
+}
 
 class Earnings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currencyObject: CURRENCY,
+      secondCurrency: CURRENCY.dollar
+    }
+
+    // Will be needed when getting currency from state
+    // this.renderCurrencyOptions = this.renderCurrencyOptions.bind(this);
+    this.handleOptionChange = this.handleOptionChange.bind(this);
+  }
+
+  renderCurrencyOptions() {
+    return Object.keys(this.state.currencyObject).map((currency) => {
+      const currencySign = this.state.currencyObject[currency]["sign"];
+      return (
+        <option key={currencySign} value={currency}>{currencySign}</option>
+      )
+    });
+  }
+
+  handleOptionChange(event) {
+    const newCurrency = event.target.value;
+    this.setState({
+      secondCurrency: this.state.currencyObject[newCurrency]
+    });
+  }
+
   render() {
-    const yearlyEarnings = this.props.earnings;
-    const monthlyEarnings = yearlyEarnings/12;
     return (
       <form id="input-form">
-        <p>Earnings: </p>
-        £ <input type="number" value={monthlyEarnings} readOnly /> /month
-        £ <input type="number" value={yearlyEarnings} readOnly /> /year
-        <button className="my-button">Add Currency</button>
+        <h3>Earnings: </h3>
+        <EarningsInput earnings={this.props.earnings} currency={this.state.currencyObject.pound} />
+        <div>
+          <p>Change second currency:</p>
+          <select onChange={this.handleOptionChange}>
+            {this.renderCurrencyOptions()}
+          </select>
+        </div>
+        <EarningsInput earnings={this.props.earnings} currency={this.state.secondCurrency} />
       </form>
     );
   }
@@ -39,8 +93,8 @@ class Calculator extends Component {
     super(props);
 
     this.state = {
-      interest: 0,
-      amount: 0,
+      interest: '',
+      amount: '',
       earnings: 0
     };
 
@@ -77,7 +131,7 @@ class Calculator extends Component {
           interest={this.state.interest}
           amount={this.state.amount}
           calculateEarnings={this.calculateEarnings}
-          />
+        />
         <Earnings earnings={this.state.earnings} />
       </div>
     );
