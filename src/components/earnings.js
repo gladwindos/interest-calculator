@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-const EarningsInput = props => {
+const EarningsItem = props => {
   const currency = props.currency;
   // console.log(currency);
+  if (props.currency !== undefined) {
   const yearlyEarnings = (props.earnings*currency.rate).toFixed(2);
   const monthlyEarnings = (yearlyEarnings/12).toFixed(2);
   return (
@@ -11,6 +12,8 @@ const EarningsInput = props => {
       {currency.sign} <input type="number" value={yearlyEarnings} readOnly /> /year
     </div>
   );
+}
+return null;
 }
 
 class Earnings extends Component {
@@ -23,13 +26,14 @@ class Earnings extends Component {
   }
 
   render() {
+    console.log(this.props.secondCurrency);
     return (
       <form id="input-form">
         <h3>Earnings: </h3>
-        <EarningsInput earnings={this.props.earnings} currency={this.props.currencyObject.pound} />
+        <EarningsItem earnings={this.props.earnings} currency={this.props.currencyObject.pound} />
         <div>
         </div>
-        <EarningsInput
+        <EarningsItem
           earnings={this.props.earnings}
           currency={this.props.secondCurrency}
         />

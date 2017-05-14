@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import '../App.css';
 
 import Savings from './savings';
@@ -38,30 +39,31 @@ class Calculator extends Component {
 
     this.state = {
       interest: '',
-      amount: 0,
+      amount: '',
       earnings: 0,
-      currencyObject: CURRENCY,
-      mainCurrency: CURRENCY.pound,
-      secondCurrency: CURRENCY.dollar
+      currencyObject: {},
+      mainCurrency: {},
+      secondCurrency: {}
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.calculateEarnings = this.calculateEarnings.bind(this);
     this.handleOptionChange = this.handleOptionChange.bind(this);
   }
 
   handleInputChange(event) {
+    console.log("input change");
     const name = event.target.name;
     const value = event.target.value;
-    // console.log(name);
-    // console.log(this.state)
+
     this.setState({
       [name]: value
-    });
+    }, this.updateEarnings);
   }
 
-  calculateEarnings(event) {
-    event.preventDefault();
+  updateEarnings() {
+    // PREVIOUS STATE IS BEING SET!!
+    console.log("interest:", this.state.interest);
+    console.log("amount:", this.state.amount);
     const interest = this.state.interest;
     const amount = this.state.amount;
     const total = (interest*amount)/100;
@@ -88,6 +90,24 @@ class Calculator extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log("did mount");
+    const url = 'http://localhost:8080/currencies';
+    axios.get(url)
+      .then((respone) => {
+        // console.log(respone.data);
+        const data = respone.data
+        this.setState({
+          currencyObject: data,
+          mainCurrency: data.pound,
+          secondCurrency:data.dollar
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div className="App">
@@ -99,7 +119,6 @@ class Calculator extends Component {
           handleInputChange={this.handleInputChange}
           interest={this.state.interest}
           amount={this.state.amount}
-          calculateEarnings={this.calculateEarnings}
           mainCurrency={this.state.mainCurrency}
           secondCurrency={this.state.secondCurrency}
         />

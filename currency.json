@@ -1,0 +1,29 @@
+{
+  "currencies": {
+    "pound": {
+      "name": "pound",
+      "rate": 1,
+      "sign": "£"
+    },
+    "dollar": {
+      "name": "dollar",
+      "rate": 1.29,
+      "sign": "$"
+    },
+    "euro": {
+      "name": "euro",
+      "rate": 0.85,
+      "sign": "€"
+    },
+    "naira": {
+      "name": "naira",
+      "rate": 409.22,
+      "sign": "₦"
+    },
+    "swissfranc": {
+      "name": "swissfranc",
+      "rate": 1.29,
+      "sign": "Fr."
+    }
+  }
+}
