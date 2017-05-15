@@ -5,41 +5,13 @@ import '../App.css';
 import Savings from './savings';
 import Earnings from './earnings';
 
-const CURRENCY = {
-  pound: {
-    name: "pound",
-    rate: 1,
-    sign: '£'
-  },
-  dollar: {
-    name: "dollar",
-    rate: 1.29,
-    sign: '$'
-  },
-  euro: {
-    name: "euro",
-    rate: 0.85,
-    sign: '€'
-  },
-  naira: {
-    name: "naira",
-    rate: 409.22,
-    sign: '₦'
-  },
-  swissfranc: {
-    name: "swissfranc",
-    rate: 1.29,
-    sign: 'Fr.'
-  }
-}
-
 class Calculator extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       interest: '',
-      amount: '',
+      amount: 0,
       earnings: 0,
       currencyObject: {},
       mainCurrency: {},
@@ -61,9 +33,6 @@ class Calculator extends Component {
   }
 
   updateEarnings() {
-    // PREVIOUS STATE IS BEING SET!!
-    console.log("interest:", this.state.interest);
-    console.log("amount:", this.state.amount);
     const interest = this.state.interest;
     const amount = this.state.amount;
     const total = (interest*amount)/100;
@@ -94,40 +63,47 @@ class Calculator extends Component {
     console.log("did mount");
     const url = 'http://localhost:8080/currencies';
     axios.get(url)
-      .then((respone) => {
-        // console.log(respone.data);
-        const data = respone.data
-        this.setState({
-          currencyObject: data,
-          mainCurrency: data.pound,
-          secondCurrency:data.dollar
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    .then((respone) => {
+      // console.log(respone.data);
+      const data = respone.data
+      this.setState({
+        currencyObject: data,
+        mainCurrency: data.pound,
+        secondCurrency:data.dollar
       });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Simple Interest Calculator</h1>
-        <select defaultValue={this.state.secondCurrency.name} onChange={this.handleOptionChange}>
-          {this.renderCurrencyOptions()}
-        </select>
-        <Savings
-          handleInputChange={this.handleInputChange}
-          interest={this.state.interest}
-          amount={this.state.amount}
-          mainCurrency={this.state.mainCurrency}
-          secondCurrency={this.state.secondCurrency}
-        />
-        <Earnings
-          currencyObject={this.state.currencyObject}
-          earnings={this.state.earnings}
-          mainCurrency={this.state.mainCurrency}
-          secondCurrency={this.state.secondCurrency}
-        />
+        <div className="container">
+          <h1>Simple Interest Calculator</h1>
+          <div className="row-view">
+            <p className="">Convert Currency:</p>
+            <div className="input-view">
+            <select className="" defaultValue={this.state.secondCurrency.name} onChange={this.handleOptionChange}>
+              {this.renderCurrencyOptions()}
+            </select>
+          </div>
+          </div>
+            <Savings
+              handleInputChange={this.handleInputChange}
+              interest={this.state.interest}
+              amount={this.state.amount}
+              mainCurrency={this.state.mainCurrency}
+              secondCurrency={this.state.secondCurrency}
+            />
+            <Earnings
+              currencyObject={this.state.currencyObject}
+              earnings={this.state.earnings}
+              mainCurrency={this.state.mainCurrency}
+              secondCurrency={this.state.secondCurrency}
+            />
+        </div>
       </div>
     );
   }

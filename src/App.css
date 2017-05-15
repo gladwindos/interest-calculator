@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 button.my-button {
@@ -8,20 +8,49 @@ button.my-button {
   margin-top: 10
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.row-view {
+  display: block;
+  width: 300px;
+  margin-top: 15px;
+  /*background-color: blue;*/
+
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.row-view * {
+  display: inline;
+  text-align: center;
+  /*margin: 1% 5% 1% 5%;*/
 }
 
-.App-intro {
-  font-size: large;
+.row-view p {
+  margin-right: 50px;
+  float: left;
+}
+
+.row-view input {
+  max-width: 90px;
+  /*background-color: #d3d3d3;*/
+}
+
+.input-view {
+  /*background-color: red;*/
+  display: block;
+  /*width: 200px;*/
+}
+
+.input-view > select {
+  margin-right: 50px;
+}
+
+span.frequency-span {
+  /*float: right;*/
+  margin-top: -40px;
+  margin-left: 150px;
+  position: absolute;
+}
+
+#earnings > p {
+  height: 300px;
 }
 
 @keyframes App-logo-spin {

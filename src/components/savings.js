@@ -8,15 +8,38 @@ export default class Savings extends Component {
       amount: props.amount,
     }
   }
+
+  renderAmount(currency) {
+    const amount = this.props.amount;
+    if(amount === "") {
+      return ""
+    }
+    return (amount*currency.rate).toFixed(2);
+  }
+
   render() {
+    const mainCurrency = this.props.mainCurrency;
+    const secondCurrency = this.props.secondCurrency;
+    const amount = this.props.amount;
+    const convertedAmount = amount*secondCurrency.rate;
+    var handleInputChange = this.props.handleInputChange;
     return (
       <form id="input-form">
-        <h3>Savings: </h3>
-        <p>Interest rate: </p>
-        <input type="number" name="interest" value={this.props.interest} onChange={this.props.handleInputChange} /> %
-        <p>Amount: </p>
-         {this.props.mainCurrency.sign} <input type="number" name="amount" value={this.props.amount} onChange={this.props.handleInputChange} />
-         {this.props.secondCurrency.sign} <input type="number" name="amount" value={this.props.amount*this.props.secondCurrency.rate} onChange={this.props.handleInputChange} />
+        <div className="row-view">
+          <p>Interest rate: </p>
+          <div className="input-view">
+            <input placeholder="" type="number" name="interest" value={this.props.interest} onChange={handleInputChange} /><span>%</span>
+          </div>
+        </div>
+        <div className="row-view">
+          <p>Savings:</p>
+          <div className="input-view">
+            <span>{mainCurrency.sign}</span> <input type="number" name="amount" value={this.renderAmount(mainCurrency)} onChange={handleInputChange} />
+          </div>
+          <div className="input-view">
+            <span>{secondCurrency.sign}</span> <input type="number" name="amount" value={this.renderAmount(secondCurrency)} readOnly/>
+          </div>
+        </div>
       </form>
     );
   }
