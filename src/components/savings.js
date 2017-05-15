@@ -20,8 +20,6 @@ export default class Savings extends Component {
   render() {
     const mainCurrency = this.props.mainCurrency;
     const secondCurrency = this.props.secondCurrency;
-    const amount = this.props.amount;
-    const convertedAmount = amount*secondCurrency.rate;
     var handleInputChange = this.props.handleInputChange;
     return (
       <form id="input-form">

@@ -5,7 +5,7 @@ const EarningsItem = props => {
     const currency = props.currencyObject;
     console.log("CURRENCY:", currency.pound);
     const earnings = props.earnings.toFixed(2);
-    const convertedEarnings = (earnings*props.secondCurrency.rate).toFixed(2);
+    var convertedEarnings = (earnings*props.secondCurrency.rate).toFixed(2);
     if (convertedEarnings === 'NaN') {
       convertedEarnings = (0).toFixed(2);
     }
